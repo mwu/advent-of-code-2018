@@ -58,8 +58,8 @@ main = do
 
     roots graph = sort $ filter ((== 0) . indeg graph) (nodes graph)
 
-workFor :: Node -> Int
-workFor = subtract 4  -- equivalent to 60 + letter position in alphabet
+    workFor :: Node -> Int
+    workFor = subtract 4  -- equivalent to 60 + letter position in alphabet
 
 zipBy :: (a -> b) -> [a] -> [(a, b)]
 zipBy f xs = zip xs (map f xs)
