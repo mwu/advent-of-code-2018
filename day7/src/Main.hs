@@ -2,8 +2,8 @@ module Main where
 
 import           Data.Char            (chr, ord)
 import           Data.Graph.Inductive (Context, Gr, LEdge, Node, context,
-                                       delNodes, indeg, isEmpty, lab', match,
-                                       mkGraph, nodes, pre, suc')
+                                       delNodes, indeg, lab', match, mkGraph,
+                                       nodes, pre, suc')
 import           Data.List            (nub, partition, sort, union, (\\))
 import           Data.Maybe           (fromJust)
 import           Data.Void            (Void)
@@ -37,7 +37,6 @@ main = do
         (Nothing, _)       -> []
 
     timeWorked :: Int -> [(Node, Int)] -> Gr Char String -> [Node] -> Int
-    timeWorked _ _ graph _ | isEmpty graph = 0
     timeWorked numWorkers wip graph q =
       case tick wip of
         (done, inProgress) -> let doneNodes   = map fst done
@@ -48,13 +47,13 @@ main = do
                                   inProgress' = inProgress ++ zipBy workFor todo
                               in
                                 if null inProgress'
-                                then timeWorked numWorkers inProgress' graph' q'
+                                then 0
                                 else 1 + timeWorked numWorkers inProgress' graph' q'
 
     nextCandidates :: Gr Char String -> Context Char String -> [Node]
     nextCandidates graph delCtx = filter (null . pre graph) $ suc' delCtx
 
-    tick :: [(Node, Int)] -> ([(Node, Int)], [(Node, Int)]) 
+    tick :: [(Node, Int)] -> ([(Node, Int)], [(Node, Int)])
     tick = partition ((== 0) . snd) . map (fmap (subtract 1))
 
     roots graph = sort $ filter ((== 0) . indeg graph) (nodes graph)
