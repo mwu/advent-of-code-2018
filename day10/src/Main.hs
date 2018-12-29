@@ -19,7 +19,7 @@ main :: IO ()
 main = do
   input <- lines <$> readFile "input.txt"
   let stars           = fromJust $ traverse (parseMaybe star) input
-      frames          = iterate (map move1) stars
+      frames          = iterate (map move) stars
       iFrames         = zip frames ([0..] :: [Int])
       (message, time) = filter (likelyMessage . fst) iFrames !! 0
 
@@ -63,11 +63,11 @@ starGrid ss = Grid { origin, bottomRight }
     (top, bottom)         = foldMap (minAndMaxPoints . position) ss
     minAndMaxPoints (x,y) = ((Min x, Min y), (Max x, Max y))
 
-move :: (Int, Int) -> Star -> Star
-move (x, y) s@(Star { position }) = s { position = bimap (+x) (+y) position }
+moveBy :: (Int, Int) -> Star -> Star
+moveBy (x, y) s@(Star { position }) = s { position = bimap (+x) (+y) position }
 
-move1 :: Star -> Star
-move1 s@Star { position = p, velocity = (vx,vy) } = s { position = bimap (+vx) (+vy) p }
+move :: Star -> Star
+move s@Star { velocity } = moveBy velocity s
 
 star :: Parser Star
 star = do
