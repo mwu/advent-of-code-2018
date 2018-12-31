@@ -1,5 +1,6 @@
 module Main where
 
+import           Data.Ix         (range)
 import           Data.Foldable   (maximumBy)
 import           Data.Function   ((&))
 import           Data.Map        (Map)
@@ -82,10 +83,7 @@ matrixOf :: (Coordinate -> a) -> Map Coordinate a
 matrixOf f = Map.fromAscList $ zip coords (map f coords)
 
 coords :: [Coordinate]
-coords = do
-  j <- [1..300]
-  k <- [1..300]
-  pure (j,k)
+coords = range ((1,1), (300,300))
 
 type Coordinate       = (Int, Int)
 type PowerLevel       = Int
