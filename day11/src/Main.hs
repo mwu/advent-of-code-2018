@@ -79,7 +79,7 @@ powerLevel gridSerial (x, y) =
     hundredsDigit n = n `div` 100 `mod` 10
 
 matrixOf :: (Coordinate -> a) -> Map Coordinate a
-matrixOf f = Map.fromList $ zip coords (map f coords)
+matrixOf f = Map.fromAscList $ zip coords (map f coords)
 
 coords :: [Coordinate]
 coords = do
